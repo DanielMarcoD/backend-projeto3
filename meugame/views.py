@@ -24,7 +24,6 @@ def api_game(request, game_id):
         # Atualizar os dados da nota
         new_game_data = request.data
         game.title = new_game_data.get('title', game.title)
-        game.description = new_game_data.get('content', game.description)
         game.save()
         serialized_note = GameSerializer(game)
         return Response(serialized_note.data)
@@ -47,11 +46,7 @@ def api_games(request):
         serializer = GameSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
-            # Recuperar a lista atualizada de todas as anotações
-            games = Game.objects.all()
-            # Serializar e retornar a lista atualizada
-            new_serializer = GameSerializer(games, many=True)
-            return Response(new_serializer.data, status=status.HTTP_201_CREATED)
+            return Response(status=status.HTTP_201_CREATED)
         else:
             # Se os dados não são válidos, retornar um erro
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
