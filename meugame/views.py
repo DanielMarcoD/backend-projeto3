@@ -45,6 +45,10 @@ def api_games(request):
         # Criar uma nova anotação a partir dos dados recebidos
         serializer = GameSerializer(data=request.data)
         if serializer.is_valid():
+            all_games = Game.objects.all()
+            for game in all_games:
+                if game.title == serializer.validated_data['title']:
+                    return Response(status=status.HTTP_409_CONFLICT)
             serializer.save()
             return Response(status=status.HTTP_201_CREATED)
         else:
