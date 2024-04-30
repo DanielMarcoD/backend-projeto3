@@ -49,11 +49,12 @@ MIDDLEWARE = [
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'corsheaders.middleware.CorsMiddleware',
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+   
 ]
 
 ROOT_URLCONF = "meugamefavorito.urls"
@@ -89,7 +90,7 @@ WSGI_APPLICATION = "meugamefavorito.wsgi.application"
 
 DATABASES = {
     'default': dj_database_url.config(
-        default='postgres://meugamefavorito_user:1EbhpREjiU2TuMkR6eFWkORYFTfaSrBi@dpg-conqensf7o1s73fpr3h0-a.oregon-postgres.render.com/meugamefavorito',
+        default='postgres://meugamefavorito_yses_user:Xjb3O0iWldTt9vBIY8REwgNL2tC845Zo@dpg-cooch8gl5elc739maurg-a.oregon-postgres.render.com/meugamefavorito_yses',
         conn_max_age=600,
         ssl_require=not DEBUG
     )
