@@ -5,6 +5,13 @@ from rest_framework.response import Response
 from django.http import Http404
 from .serializers import GameSerializer
 from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from django.http import Http404, HttpResponseForbidden, JsonResponse
+from django.contrib.auth import authenticate
+from rest_framework.authtoken.models import Token
+from django.contrib.auth.models import User
+from django.contrib.auth.hashers import check_password
 
 # Create your views here.
 def index(request):
@@ -33,6 +40,7 @@ def api_game(request, game_id):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def api_games(request):
     if request.method == 'GET':
         # Recuperar todas as anotações
@@ -54,5 +62,44 @@ def api_games(request):
         else:
             # Se os dados não são válidos, retornar um erro
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
+        
+@api_view(['POST'])
+def api_get_token(request):
+    try:
+        if request.method == 'POST':
+            username = request.data['username']
+            password = request.data['password']
+            user = authenticate(username=username, password=password)
+
+            if user is not None:
+                token, created = Token.objects.get_or_create(user=user)
+                return JsonResponse({"token":token.key})
+            else:
+                return HttpResponseForbidden()
+    except:
+        return HttpResponseForbidden()
+
+@api_view(['POST'])
+def api_user(request):
+    if request.method == 'POST':
+        username = request.data['username']
+        password = request.data['password']
+        users = User.objects.all()
+        for user in users:
+            if user.username == username:
+
+                print(user.password)
+                print(password)
+                if check_password(password, user.password):
+                    return Response(status=status.HTTP_200_OK)
+                else:
+                    return Response(status=status.HTTP_409_CONFLICT)
+        email = request.data['email']
+
+        
+                
+        user = User.objects.create_user(username, email, password)
+        user.save()
+        return Response(status=204)
+         
 

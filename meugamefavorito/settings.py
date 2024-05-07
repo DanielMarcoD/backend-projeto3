@@ -38,11 +38,16 @@ INSTALLED_APPS = [
     'corsheaders',
     "django.contrib.contenttypes",
     "django.contrib.sessions",
+    'rest_framework.authtoken',
     "django.contrib.messages",
     'rest_framework',
     "django.contrib.staticfiles",
 ]
-
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',  
+    ],
+}
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -81,20 +86,20 @@ WSGI_APPLICATION = "meugamefavorito.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
 DATABASES = {
-    'default': dj_database_url.config(
-        default='postgres://meugamefavorito_yses_user:Xjb3O0iWldTt9vBIY8REwgNL2tC845Zo@dpg-cooch8gl5elc739maurg-a.oregon-postgres.render.com/meugamefavorito_yses',
-        conn_max_age=600,
-        ssl_require=not DEBUG
-    )
+    "default": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": BASE_DIR / "db.sqlite3",
+    }
 }
+
+# DATABASES = {
+#     'default': dj_database_url.config(
+#         default='postgres://meugamefavorito_yses_user:Xjb3O0iWldTt9vBIY8REwgNL2tC845Zo@dpg-cooch8gl5elc739maurg-a.oregon-postgres.render.com/meugamefavorito_yses',
+#         conn_max_age=600,
+#         ssl_require=not DEBUG
+#     )
+# }
 
 
 # Password validation
