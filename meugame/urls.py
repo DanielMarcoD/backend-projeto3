@@ -8,4 +8,5 @@ urlpatterns = [
     path('api/games/', views.api_games),
     path('api/token/', views.api_get_token),
     path('api/users/', views.api_user),
+    path('api/infos/', views.api_infos),
 ]

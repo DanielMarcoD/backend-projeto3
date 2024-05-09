@@ -17,6 +17,7 @@ from django.contrib.auth.hashers import check_password
 def index(request):
     return render(request, "meugame/index.html")
 @api_view(['GET', 'POST', 'DELETE'])
+@permission_classes([IsAuthenticated])
 def api_game(request, game_id):
     try:
         game = Game.objects.get(id=game_id)
@@ -43,8 +44,7 @@ def api_game(request, game_id):
 @permission_classes([IsAuthenticated])
 def api_games(request):
     if request.method == 'GET':
-        # Recuperar todas as anotações
-        games = Game.objects.all()
+        games = Game.objects.filter(user=request.user)
         # Serializar a lista de anotações
         serializer = GameSerializer(games, many=True)
         return Response(serializer.data)
@@ -53,11 +53,11 @@ def api_games(request):
         # Criar uma nova anotação a partir dos dados recebidos
         serializer = GameSerializer(data=request.data)
         if serializer.is_valid():
-            all_games = Game.objects.all()
+            all_games = Game.objects.filter(user=request.user)
             for game in all_games:
                 if game.title == serializer.validated_data['title']:
                     return Response(status=status.HTTP_409_CONFLICT)
-            serializer.save()
+            serializer.save(user=request.user)
             return Response(status=status.HTTP_201_CREATED)
         else:
             # Se os dados não são válidos, retornar um erro
@@ -101,5 +101,24 @@ def api_user(request):
         user = User.objects.create_user(username, email, password)
         user.save()
         return Response(status=204)
-         
+@api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
+def api_infos(request):
+    if request.method == 'GET':
+        username = request.user.username
+        email = request.user.email
+        return JsonResponse({"username": username, "email": email})
+    elif request.method == 'POST':
+        username = request.data['username']
+        password = request.data['password']
+        email = request.data['email']
+        
+        # Atualiza o usuário com os novos valores
+        User.objects.filter(username=request.user.username).update(username=username, email=email)
+        # Atualiza a senha, se houver uma senha nova
+        if password:
+            request.user.set_password(password)
+            request.user.save()
+        
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
