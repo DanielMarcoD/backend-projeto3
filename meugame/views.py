@@ -101,7 +101,7 @@ def api_user(request):
         user = User.objects.create_user(username, email, password)
         user.save()
         return Response(status=204)
-@api_view(['GET', 'POST'])
+@api_view(['GET', 'POST','DELETE'])
 @permission_classes([IsAuthenticated])
 def api_infos(request):
     if request.method == 'GET':
@@ -120,5 +120,10 @@ def api_infos(request):
             request.user.set_password(password)
             request.user.save()
         
+        return Response(status=status.HTTP_204_NO_CONTENT)
+    elif request.method == 'DELETE':
+        for game in Game.objects.filter(user=request.user):
+            game.delete()
+        request.user.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
