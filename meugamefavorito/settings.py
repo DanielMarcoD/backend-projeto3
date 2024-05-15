@@ -86,20 +86,20 @@ WSGI_APPLICATION = "meugamefavorito.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
-
 # DATABASES = {
-#     'default': dj_database_url.config(
-#         default='postgres://meugamefavorito_yses_user:Xjb3O0iWldTt9vBIY8REwgNL2tC845Zo@dpg-cooch8gl5elc739maurg-a.oregon-postgres.render.com/meugamefavorito_yses',
-#         conn_max_age=600,
-#         ssl_require=not DEBUG
-#     )
+#     "default": {
+#         "ENGINE": "django.db.backends.sqlite3",
+#         "NAME": BASE_DIR / "db.sqlite3",
+#     }
 # }
+
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://projeto_3_user:UE2F8D2uC39CaguQkjSDIlgaqT4GKjjj@dpg-cp2dij779t8c73frv2qg-a.oregon-postgres.render.com/projeto_3',
+        conn_max_age=600,
+        ssl_require=not DEBUG
+    )
+}
 
 
 # Password validation
